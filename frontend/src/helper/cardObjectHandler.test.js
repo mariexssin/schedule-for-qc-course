@@ -34,4 +34,54 @@ describe('cardObjectHandler function', () => {
             semester,
         });
     });
+
+    // ДОДАНО
+    it('should convert string numbers to numbers', () => {
+        const stringCard = {
+            lessonCardId: '12',
+            hours: '2',
+            subject: { id: '2' },
+        };
+        const result = cardObjectHandler(stringCard, semester, link);
+        
+        expect(result.id).toStrictEqual(12);
+        expect(result.hours).toStrictEqual(2);
+        expect(result.subject.id).toStrictEqual(2);
+    });
+
+    // ДОДАНО
+    it('should handle 0 values correctly', () => {
+        const zeroCard = {
+            lessonCardId: 0,
+            hours: 0,
+            subject: { id: 0 },
+        };
+        const result = cardObjectHandler(zeroCard, semester, link);
+        
+        expect(result.id).toStrictEqual(0);
+        expect(result.hours).toStrictEqual(0);
+        expect(result.subject.id).toStrictEqual(0);
+    });
+
+    // ДОДАНО
+    it('should handle card with empty subject safely', () => {
+        const emptyCard = {
+            subject: {} 
+        };
+        const result = cardObjectHandler(emptyCard, semester, link);
+        
+        expect(result.id).toBeNaN();
+        expect(result.hours).toBeNaN();
+        expect(result.subject.id).toBeNaN();
+        expect(result.lessonType).toBeUndefined();
+    });
+
+     // ДОДАНО
+    it('should handle empty card safely', () => {
+        const emptyCard = {};
+
+        expect(() => {
+            cardObjectHandler(emptyCard, semester, link);
+        }).toThrow(TypeError);
+    });
 });

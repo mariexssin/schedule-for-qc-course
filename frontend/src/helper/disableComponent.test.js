@@ -100,4 +100,28 @@ describe('setDisabledSaveButtonSemester function', () => {
             ).toBeFalsy();
         });
     });
+
+    // ДОДАНО
+    describe('Kill specific surviving mutants (lines 15, 18, 19)', () => {
+        it('should kill logical operator mutant on line 15 (&& changed to ||)', () => {
+            const mutant1Semester = { semester_groups: [] }; 
+            expect(setDisabledSaveButtonSemester(true, false, mutant1Semester, [])).toBeTruthy();
+        });
+
+        it('should kill filter mutant for newGroups on line 18', () => {
+            const addedGroups = [...selectedGroups, { id: 99, label: 'New Group' }];
+            expect(setDisabledSaveButtonSemester(true, false, semester, addedGroups)).toBeFalsy();
+        });
+
+        it('should kill filter mutant for deleteGroups on line 19', () => {
+            expect(setDisabledSaveButtonSemester(true, false, semester, [])).toBeFalsy();
+        });
+    });
+
+    // ДОДАНО
+    it('should handle null semester and undefined selectedGroups correctly', () => {
+        expect(setDisabledSaveButtonSemester(true, false, null, undefined)).toBeTruthy();
+        
+        expect(setDisabledSaveButtonSemester(false, false, null, undefined)).toBeFalsy();
+    });
 });
